@@ -4,17 +4,20 @@
 import rospy
 from geometry_msgs.msg import Twist
 
-pub = rospy.Publisher('turtle1/cmd_vel', Twist, queue_size=10)
+class MiddleWare:
 
-def callback(data):
-    pub.publish(data)
-    
+    def __init__(self):
+        self.pub = rospy.Publisher('turtle1/cmd_vel', Twist, queue_size=10)
+        self.sub = rospy.Subscriber("fleet_cmd", Twist, self.callback)
+
+    def callback(self, data):
+        self.pub.publish(data)
+
 
 if __name__ == '__main__':
     try:
         rospy.init_node('listen_2fleet', anonymous=True)
-        rospy.Subscriber("fleet_cmd", Twist, callback)
+        MiddleWare()
         rospy.spin()
-
     except rospy.ROSInterruptException:
         pass
