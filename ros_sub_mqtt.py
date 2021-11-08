@@ -29,8 +29,10 @@ def on_disconnect(client, userdata, flags, rc=0):
 def on_message(client, userdata, msg):
     topic=msg.topic
     msg_decode=msg.payload.decode("utf-8")
+    #gets json message from mqtt pub
     m_in=json.loads(msg_decode)
     fleet_msg = Twist()
+    #create a ros msg from json
     #fleet_msg.linear.x = int(msg_decode)
     pub.publish(fleet_msg)
 
